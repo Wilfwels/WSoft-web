@@ -543,30 +543,30 @@
             line-height: 1.5;
         }
 
-/* =========================
-   GALLERY RESPONSIVE
-========================= */
-
-@media (max-width: 950px) {
-
-    .gallery {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-}
-
-@media (max-width: 650px) {
-
-    .gallery {
-        grid-template-columns: 1fr;
-    }
-
-    .gallery-image {
-        height: 230px;
-        flex-basis: 230px;
-    }
-
-}
+        /* =========================
+           GALLERY RESPONSIVE
+        ========================= */
+        
+        @media (max-width: 950px) {
+        
+            .gallery {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        
+        }
+        
+        @media (max-width: 650px) {
+        
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+        
+            .gallery-image {
+                height: 230px;
+                flex-basis: 230px;
+            }
+        
+        }
 
         /* =========================
            DOCUMENTATION
@@ -785,11 +785,338 @@
                 text-align: center;
             }
 
+        }/* =========================
+           GALLERY LIGHTBOX
+        ========================= */
+        
+        .gallery-lightbox {
+            position: fixed;
+            inset: 0;
+        
+            background: rgba(4, 12, 22, .94);
+        
+            display: none;
+            align-items: center;
+            justify-content: center;
+        
+            z-index: 9999;
+        
+            padding: 30px;
+            box-sizing: border-box;
         }
-
+        
+        .gallery-lightbox.active {
+            display: flex;
+        }
+        
+        .gallery-lightbox-content {
+            max-width: 92vw;
+            max-height: 88vh;
+        
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        
+            text-align: center;
+        }
+        
+        .gallery-lightbox-content img {
+            display: block;
+        
+            max-width: 90vw;
+            max-height: 78vh;
+        
+            width: auto;
+            height: auto;
+        
+            object-fit: contain;
+        
+            border-radius: 10px;
+        
+            box-shadow: 0 20px 60px rgba(0,0,0,.45);
+        }
+        
+        #galleryLightboxCaption {
+            margin-top: 15px;
+        
+            color: white;
+        
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        /* BOTÓN CERRAR */
+        
+        .gallery-close {
+            position: absolute;
+        
+            top: 20px;
+            right: 25px;
+        
+            width: 48px;
+            height: 48px;
+        
+            border: none;
+            border-radius: 50%;
+        
+            background: rgba(255,255,255,.12);
+            color: white;
+        
+            font-size: 34px;
+            line-height: 1;
+        
+            cursor: pointer;
+        
+            transition: background .2s ease, transform .2s ease;
+        }
+        
+        .gallery-close:hover {
+            background: rgba(255,255,255,.22);
+            transform: scale(1.08);
+        }
+        
+        /* BOTONES ANTERIOR / SIGUIENTE */
+        
+        .gallery-prev,
+        .gallery-next {
+            position: absolute;
+        
+            top: 50%;
+            transform: translateY(-50%);
+        
+            width: 52px;
+            height: 52px;
+        
+            border: none;
+            border-radius: 50%;
+        
+            background: rgba(255,255,255,.12);
+            color: white;
+        
+            font-size: 30px;
+        
+            cursor: pointer;
+        
+            transition:
+                background .2s ease,
+                transform .2s ease;
+        }
+        
+        .gallery-prev {
+            left: 25px;
+        }
+        
+        .gallery-next {
+            right: 25px;
+        }
+        
+        .gallery-prev:hover,
+        .gallery-next:hover {
+            background: rgba(255,255,255,.22);
+        }
+        
+        .gallery-prev:hover {
+            transform: translateY(-50%) scale(1.08);
+        }
+        
+        .gallery-next:hover {
+            transform: translateY(-50%) scale(1.08);
+        }
+        
+        /* =========================
+           LIGHTBOX MOBILE
+        ========================= */
+        
+        @media (max-width: 650px) {
+        
+            .gallery-lightbox {
+                padding: 20px;
+            }
+        
+            .gallery-lightbox-content img {
+                max-width: 94vw;
+                max-height: 72vh;
+            }
+        
+            .gallery-close {
+                top: 12px;
+                right: 12px;
+        
+                width: 42px;
+                height: 42px;
+        
+                font-size: 29px;
+            }
+        
+            .gallery-prev,
+            .gallery-next {
+                width: 42px;
+                height: 42px;
+        
+                font-size: 24px;
+            }
+        
+            .gallery-prev {
+                left: 10px;
+            }
+        
+            .gallery-next {
+                right: 10px;
+            }
+        
+            #galleryLightboxCaption {
+                font-size: 14px;
+            }
+        
+        }
+    
+                
     </style>
 </head>
 
+<script>
+/* =========================
+   GALLERY LIGHTBOX
+========================= */
+
+const galleryImages = document.querySelectorAll(".gallery-clickable");
+
+const galleryLightbox = document.getElementById("galleryLightbox");
+const galleryLightboxImage = document.getElementById("galleryLightboxImage");
+const galleryLightboxCaption = document.getElementById("galleryLightboxCaption");
+
+const galleryClose = document.querySelector(".gallery-close");
+const galleryPrev = document.querySelector(".gallery-prev");
+const galleryNext = document.querySelector(".gallery-next");
+
+let galleryCurrentIndex = 0;
+
+
+/* ABRIR IMAGEN */
+
+function openGallery(index) {
+
+    galleryCurrentIndex = index;
+
+    const image = galleryImages[galleryCurrentIndex];
+
+    galleryLightboxImage.src = image.src;
+    galleryLightboxImage.alt = image.alt;
+
+    galleryLightboxCaption.textContent = image.alt;
+
+    galleryLightbox.classList.add("active");
+
+    document.body.style.overflow = "hidden";
+}
+
+
+/* CERRAR */
+
+function closeGallery() {
+
+    galleryLightbox.classList.remove("active");
+
+    document.body.style.overflow = "";
+}
+
+
+/* IMAGEN ANTERIOR */
+
+function previousGalleryImage() {
+
+    galleryCurrentIndex--;
+
+    if (galleryCurrentIndex < 0) {
+        galleryCurrentIndex = galleryImages.length - 1;
+    }
+
+    updateGalleryImage();
+}
+
+
+/* IMAGEN SIGUIENTE */
+
+function nextGalleryImage() {
+
+    galleryCurrentIndex++;
+
+    if (galleryCurrentIndex >= galleryImages.length) {
+        galleryCurrentIndex = 0;
+    }
+
+    updateGalleryImage();
+}
+
+
+/* ACTUALIZAR IMAGEN */
+
+function updateGalleryImage() {
+
+    const image = galleryImages[galleryCurrentIndex];
+
+    galleryLightboxImage.src = image.src;
+    galleryLightboxImage.alt = image.alt;
+
+    galleryLightboxCaption.textContent = image.alt;
+}
+
+
+/* CLICK EN LAS IMÁGENES */
+
+galleryImages.forEach((image, index) => {
+
+    image.addEventListener("click", function () {
+        openGallery(index);
+    });
+
+});
+
+
+/* BOTONES */
+
+galleryClose.addEventListener("click", closeGallery);
+
+galleryPrev.addEventListener("click", previousGalleryImage);
+
+galleryNext.addEventListener("click", nextGalleryImage);
+
+
+/* CLICK FUERA DE LA IMAGEN */
+
+galleryLightbox.addEventListener("click", function (event) {
+
+    if (event.target === galleryLightbox) {
+        closeGallery();
+    }
+
+});
+
+
+/* TECLADO */
+
+document.addEventListener("keydown", function (event) {
+
+    if (!galleryLightbox.classList.contains("active")) {
+        return;
+    }
+
+    if (event.key === "Escape") {
+        closeGallery();
+    }
+
+    if (event.key === "ArrowLeft") {
+        previousGalleryImage();
+    }
+
+    if (event.key === "ArrowRight") {
+        nextGalleryImage();
+    }
+
+});
+
+</script>
 
 <body>
 
@@ -1312,7 +1639,32 @@
 
 </section>
 
+<!-- =========================
+     GALLERY LIGHTBOX
+========================= -->
 
+<div id="galleryLightbox" class="gallery-lightbox">
+
+    <button class="gallery-close" type="button" aria-label="Cerrar">
+        &times;
+    </button>
+
+    <button class="gallery-prev" type="button" aria-label="Imagen anterior">
+        &#10094;
+    </button>
+
+    <div class="gallery-lightbox-content">
+        <img id="galleryLightboxImage" src="" alt="">
+        <div id="galleryLightboxCaption"></div>
+    </div>
+
+    <button class="gallery-next" type="button" aria-label="Imagen siguiente">
+        &#10095;
+    </button>
+
+</div>
+
+    
 <!-- =========================
      DOCUMENTACIÓN
 ========================= -->
