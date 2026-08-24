@@ -454,88 +454,85 @@
         /* =========================
            GALLERY
         ========================= */
-        
+
         .gallery {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 25px;
             align-items: stretch;
         }
-        
+
         .gallery-card {
             background: white;
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid #e1e7ee;
             box-shadow: 0 8px 25px rgba(0,0,0,.07);
-        
+
             display: flex;
             flex-direction: column;
-        
-            height: 100%;
+
             min-width: 0;
-        
+            height: 100%;
+
             transition:
                 transform .25s ease,
                 box-shadow .25s ease;
         }
-        
+
         .gallery-card:hover {
             transform: translateY(-6px);
             box-shadow: 0 18px 40px rgba(0,0,0,.13);
         }
-        
+
         .gallery-image {
             width: 100%;
             height: 220px;
             flex: 0 0 220px;
-        
+
             background: #eef3f8;
-        
+
             display: flex;
             align-items: center;
             justify-content: center;
-        
+
             overflow: hidden;
             padding: 12px;
-        
-            box-sizing: border-box;
         }
-        
+
         .gallery-image img {
             display: block;
-        
             width: 100%;
             height: 100%;
-        
+
             object-fit: contain;
-        
+
             border-radius: 8px;
-        
+
+            cursor: pointer;
+
             transition: transform .3s ease;
         }
-        
+
         .gallery-card:hover .gallery-image img {
             transform: scale(1.03);
         }
-        
+
         .gallery-info {
             padding: 20px;
-        
+
             flex: 1;
+
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-        
-            box-sizing: border-box;
         }
-        
+
         .gallery-info h3 {
             margin: 0 0 7px;
             font-size: 18px;
             line-height: 1.3;
         }
-        
+
         .gallery-info p {
             margin: 0;
             color: #657386;
@@ -544,28 +541,127 @@
         }
 
         /* =========================
-           GALLERY RESPONSIVE
+           GALLERY LIGHTBOX
         ========================= */
-        
-        @media (max-width: 950px) {
-        
-            .gallery {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        
+
+        .gallery-lightbox {
+            position: fixed;
+            inset: 0;
+
+            background: rgba(4, 12, 22, .94);
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            z-index: 9999;
+
+            padding: 30px;
         }
-        
-        @media (max-width: 650px) {
-        
-            .gallery {
-                grid-template-columns: 1fr;
-            }
-        
-            .gallery-image {
-                height: 230px;
-                flex-basis: 230px;
-            }
-        
+
+        .gallery-lightbox.active {
+            display: flex;
+        }
+
+        .gallery-lightbox-content {
+            max-width: 92vw;
+            max-height: 88vh;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+        }
+
+        .gallery-lightbox-content img {
+            display: block;
+
+            max-width: 90vw;
+            max-height: 78vh;
+
+            width: auto;
+            height: auto;
+
+            object-fit: contain;
+
+            border-radius: 10px;
+
+            box-shadow: 0 20px 60px rgba(0,0,0,.45);
+        }
+
+        #galleryLightboxCaption {
+            margin-top: 15px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .gallery-close,
+        .gallery-prev,
+        .gallery-next {
+            position: absolute;
+
+            border: none;
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.12);
+            color: white;
+
+            cursor: pointer;
+
+            transition:
+                background .2s ease,
+                transform .2s ease;
+        }
+
+        .gallery-close {
+            top: 20px;
+            right: 25px;
+
+            width: 48px;
+            height: 48px;
+
+            font-size: 34px;
+            line-height: 1;
+        }
+
+        .gallery-prev,
+        .gallery-next {
+            top: 50%;
+            transform: translateY(-50%);
+
+            width: 52px;
+            height: 52px;
+
+            font-size: 30px;
+        }
+
+        .gallery-prev {
+            left: 25px;
+        }
+
+        .gallery-next {
+            right: 25px;
+        }
+
+        .gallery-close:hover,
+        .gallery-prev:hover,
+        .gallery-next:hover {
+            background: rgba(255,255,255,.22);
+        }
+
+        .gallery-close:hover {
+            transform: scale(1.08);
+        }
+
+        .gallery-prev:hover {
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .gallery-next:hover {
+            transform: translateY(-50%) scale(1.08);
         }
 
         /* =========================
@@ -737,7 +833,7 @@
             }
 
             .gallery {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2, minmax(0, 1fr));
             }
 
             .doc-grid {
@@ -751,7 +847,6 @@
             .stat:nth-child(2) {
                 border-right: none;
             }
-
         }
 
         @media (max-width: 650px) {
@@ -775,6 +870,11 @@
                 grid-template-columns: 1fr;
             }
 
+            .gallery-image {
+                height: 230px;
+                flex-basis: 230px;
+            }
+
             .stats {
                 margin-left: 20px;
                 margin-right: 20px;
@@ -785,349 +885,49 @@
                 text-align: center;
             }
 
-        }/* =========================
-           GALLERY LIGHTBOX
-        ========================= */
-        
-        .gallery-lightbox {
-            position: fixed;
-            inset: 0;
-        
-            background: rgba(4, 12, 22, .94);
-        
-            display: none;
-            align-items: center;
-            justify-content: center;
-        
-            z-index: 9999;
-        
-            padding: 30px;
-            box-sizing: border-box;
-        }
-        
-        .gallery-lightbox.active {
-            display: flex;
-        }
-        
-        .gallery-lightbox-content {
-            max-width: 92vw;
-            max-height: 88vh;
-        
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        
-            text-align: center;
-        }
-        
-        .gallery-lightbox-content img {
-            display: block;
-        
-            max-width: 90vw;
-            max-height: 78vh;
-        
-            width: auto;
-            height: auto;
-        
-            object-fit: contain;
-        
-            border-radius: 10px;
-        
-            box-shadow: 0 20px 60px rgba(0,0,0,.45);
-        }
-        
-        #galleryLightboxCaption {
-            margin-top: 15px;
-        
-            color: white;
-        
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        /* BOTÓN CERRAR */
-        
-        .gallery-close {
-            position: absolute;
-        
-            top: 20px;
-            right: 25px;
-        
-            width: 48px;
-            height: 48px;
-        
-            border: none;
-            border-radius: 50%;
-        
-            background: rgba(255,255,255,.12);
-            color: white;
-        
-            font-size: 34px;
-            line-height: 1;
-        
-            cursor: pointer;
-        
-            transition: background .2s ease, transform .2s ease;
-        }
-        
-        .gallery-close:hover {
-            background: rgba(255,255,255,.22);
-            transform: scale(1.08);
-        }
-        
-        /* BOTONES ANTERIOR / SIGUIENTE */
-        
-        .gallery-prev,
-        .gallery-next {
-            position: absolute;
-        
-            top: 50%;
-            transform: translateY(-50%);
-        
-            width: 52px;
-            height: 52px;
-        
-            border: none;
-            border-radius: 50%;
-        
-            background: rgba(255,255,255,.12);
-            color: white;
-        
-            font-size: 30px;
-        
-            cursor: pointer;
-        
-            transition:
-                background .2s ease,
-                transform .2s ease;
-        }
-        
-        .gallery-prev {
-            left: 25px;
-        }
-        
-        .gallery-next {
-            right: 25px;
-        }
-        
-        .gallery-prev:hover,
-        .gallery-next:hover {
-            background: rgba(255,255,255,.22);
-        }
-        
-        .gallery-prev:hover {
-            transform: translateY(-50%) scale(1.08);
-        }
-        
-        .gallery-next:hover {
-            transform: translateY(-50%) scale(1.08);
-        }
-        
-        /* =========================
-           LIGHTBOX MOBILE
-        ========================= */
-        
-        @media (max-width: 650px) {
-        
             .gallery-lightbox {
                 padding: 20px;
             }
-        
+
             .gallery-lightbox-content img {
                 max-width: 94vw;
                 max-height: 72vh;
             }
-        
+
             .gallery-close {
                 top: 12px;
                 right: 12px;
-        
+
                 width: 42px;
                 height: 42px;
-        
+
                 font-size: 29px;
             }
-        
+
             .gallery-prev,
             .gallery-next {
                 width: 42px;
                 height: 42px;
-        
                 font-size: 24px;
             }
-        
+
             .gallery-prev {
                 left: 10px;
             }
-        
+
             .gallery-next {
                 right: 10px;
             }
-        
+
             #galleryLightboxCaption {
                 font-size: 14px;
             }
-        
         }
-    
-                
+
     </style>
 </head>
 
 <body>
-        #galleryLightboxCaption {
-                font-size: 14px;
-            }
-        
-        }
-    
-                
-    </style>
-</head>
-
-<script>
-/* =========================
-   GALLERY LIGHTBOX
-========================= */
-
-const galleryImages = document.querySelectorAll(".gallery-clickable");
-
-const galleryLightbox = document.getElementById("galleryLightbox");
-const galleryLightboxImage = document.getElementById("galleryLightboxImage");
-const galleryLightboxCaption = document.getElementById("galleryLightboxCaption");
-
-const galleryClose = document.querySelector(".gallery-close");
-const galleryPrev = document.querySelector(".gallery-prev");
-const galleryNext = document.querySelector(".gallery-next");
-
-let galleryCurrentIndex = 0;
-
-
-/* ABRIR IMAGEN */
-
-function openGallery(index) {
-
-    galleryCurrentIndex = index;
-
-    const image = galleryImages[galleryCurrentIndex];
-
-    galleryLightboxImage.src = image.src;
-    galleryLightboxImage.alt = image.alt;
-
-    galleryLightboxCaption.textContent = image.alt;
-
-    galleryLightbox.classList.add("active");
-
-    document.body.style.overflow = "hidden";
-}
-
-
-/* CERRAR */
-
-function closeGallery() {
-
-    galleryLightbox.classList.remove("active");
-
-    document.body.style.overflow = "";
-}
-
-
-/* IMAGEN ANTERIOR */
-
-function previousGalleryImage() {
-
-    galleryCurrentIndex--;
-
-    if (galleryCurrentIndex < 0) {
-        galleryCurrentIndex = galleryImages.length - 1;
-    }
-
-    updateGalleryImage();
-}
-
-
-/* IMAGEN SIGUIENTE */
-
-function nextGalleryImage() {
-
-    galleryCurrentIndex++;
-
-    if (galleryCurrentIndex >= galleryImages.length) {
-        galleryCurrentIndex = 0;
-    }
-
-    updateGalleryImage();
-}
-
-
-/* ACTUALIZAR IMAGEN */
-
-function updateGalleryImage() {
-
-    const image = galleryImages[galleryCurrentIndex];
-
-    galleryLightboxImage.src = image.src;
-    galleryLightboxImage.alt = image.alt;
-
-    galleryLightboxCaption.textContent = image.alt;
-}
-
-
-/* CLICK EN LAS IMÁGENES */
-
-galleryImages.forEach((image, index) => {
-
-    image.addEventListener("click", function () {
-        openGallery(index);
-    });
-
-});
-
-
-/* BOTONES */
-
-galleryClose.addEventListener("click", closeGallery);
-
-galleryPrev.addEventListener("click", previousGalleryImage);
-
-galleryNext.addEventListener("click", nextGalleryImage);
-
-
-/* CLICK FUERA DE LA IMAGEN */
-
-galleryLightbox.addEventListener("click", function (event) {
-
-    if (event.target === galleryLightbox) {
-        closeGallery();
-    }
-
-});
-
-
-/* TECLADO */
-
-document.addEventListener("keydown", function (event) {
-
-    if (!galleryLightbox.classList.contains("active")) {
-        return;
-    }
-
-    if (event.key === "Escape") {
-        closeGallery();
-    }
-
-    if (event.key === "ArrowLeft") {
-        previousGalleryImage();
-    }
-
-    if (event.key === "ArrowRight") {
-        nextGalleryImage();
-    }
-
-});
-
-</script>
 
 <body>
 
@@ -1339,23 +1139,19 @@ document.addEventListener("keydown", function (event) {
             <ul class="check-list">
 
                 <li>Gestión de productos y existencias</li>
-
                 <li>Ventas mediante punto de venta</li>
-
                 <li>Compras y movimientos de inventario</li>
-
                 <li>Clientes, proveedores y vendedores</li>
-
                 <li>Kardex y reportes</li>
-
                 <li>Copias de seguridad y restauración</li>
 
             </ul>
 
         </div>
 
+
         <div class="screen-placeholder">
-        
+
             <img
                 src="images/Login.png"
                 alt="Pantalla de inicio de WSoft Lite 1.6"
@@ -1368,7 +1164,7 @@ document.addEventListener("keydown", function (event) {
                     display:block;
                 "
             >
-        
+
         </div>
 
     </div>
@@ -1519,6 +1315,7 @@ document.addEventListener("keydown", function (event) {
 
 </section>
 
+
 <!-- =========================
      GALERÍA
 ========================= -->
@@ -1542,112 +1339,188 @@ document.addEventListener("keydown", function (event) {
 
     </div>
 
-<div class="gallery">
 
-    <!-- LOGIN -->
-    <div class="gallery-card">
-        <div class="gallery-image">
-            <img
-                src="images/Login.png"
-                alt="Pantalla de inicio de WSoft Lite 1.6"
-                class="gallery-clickable"
-            >
+    <div class="gallery">
+
+
+        <!-- LOGIN -->
+
+        <div class="gallery-card">
+
+            <div class="gallery-image">
+
+                <img
+                    src="images/Login.png"
+                    alt="Pantalla de inicio de WSoft Lite 1.6"
+                    class="gallery-clickable"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    Inicio de sesión
+                </h3>
+
+                <p>
+                    Acceso al sistema y control de usuarios.
+                </p>
+
+            </div>
+
         </div>
 
-        <div class="gallery-info">
-            <h3>Inicio de sesión</h3>
-            <p>Acceso al sistema y control de usuarios.</p>
+
+        <!-- VENTAS -->
+
+        <div class="gallery-card">
+
+            <div class="gallery-image">
+
+                <img
+                    src="images/ventas.jpg"
+                    alt="Módulo de ventas de WSoft Lite"
+                    class="gallery-clickable"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    Ventas
+                </h3>
+
+                <p>
+                    Punto de venta y operaciones comerciales.
+                </p>
+
+            </div>
+
         </div>
+
+
+        <!-- COMPRAS -->
+
+        <div class="gallery-card">
+
+            <div class="gallery-image">
+
+                <img
+                    src="images/compras.jpg"
+                    alt="Módulo de compras de WSoft Lite"
+                    class="gallery-clickable"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    Compras
+                </h3>
+
+                <p>
+                    Registro y gestión de compras.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ENTRADAS -->
+
+        <div class="gallery-card">
+
+            <div class="gallery-image">
+
+                <img
+                    src="images/entradas.jpg"
+                    alt="Entradas de inventario de WSoft Lite"
+                    class="gallery-clickable"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    Entradas de inventario
+                </h3>
+
+                <p>
+                    Registro de entradas y movimientos.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- REPORTES -->
+
+        <div class="gallery-card">
+
+            <div class="gallery-image">
+
+                <img
+                    src="images/reportes.jpg"
+                    alt="Reportes de WSoft Lite"
+                    class="gallery-clickable"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    Reportes
+                </h3>
+
+                <p>
+                    Información y análisis de operaciones.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESPALDO -->
+
+        <div class="gallery-card">
+
+            <div class="gallery-image">
+
+                <img
+                    src="images/Respaldo.png"
+                    alt="Respaldo de datos de WSoft Lite"
+                    class="gallery-clickable"
+                >
+
+            </div>
+
+            <div class="gallery-info">
+
+                <h3>
+                    Respaldo de datos
+                </h3>
+
+                <p>
+                    Creación y gestión de copias de seguridad.
+                </p>
+
+            </div>
+
+        </div>
+
+
     </div>
-
-
-    <!-- VENTAS -->
-    <div class="gallery-card">
-        <div class="gallery-image">
-            <img
-                src="images/ventas.jpg"
-                alt="Módulo de ventas de WSoft Lite"
-                class="gallery-clickable"
-            >
-        </div>
-
-        <div class="gallery-info">
-            <h3>Ventas</h3>
-            <p>Punto de venta y operaciones comerciales.</p>
-        </div>
-    </div>
-
-
-    <!-- COMPRAS -->
-    <div class="gallery-card">
-        <div class="gallery-image">
-            <img
-                src="images/compras.jpg"
-                alt="Módulo de compras de WSoft Lite"
-                class="gallery-clickable"
-            >
-        </div>
-
-        <div class="gallery-info">
-            <h3>Compras</h3>
-            <p>Registro y gestión de compras.</p>
-        </div>
-    </div>
-
-
-    <!-- ENTRADAS -->
-    <div class="gallery-card">
-        <div class="gallery-image">
-            <img
-                src="images/entradas.jpg"
-                alt="Entradas de inventario de WSoft Lite"
-                class="gallery-clickable"
-            >
-        </div>
-
-        <div class="gallery-info">
-            <h3>Entradas de inventario</h3>
-            <p>Registro de entradas y movimientos.</p>
-        </div>
-    </div>
-
-
-    <!-- REPORTES -->
-    <div class="gallery-card">
-        <div class="gallery-image">
-            <img
-                src="images/reportes.jpg"
-                alt="Reportes de WSoft Lite"
-                class="gallery-clickable"
-            >
-        </div>
-
-        <div class="gallery-info">
-            <h3>Reportes</h3>
-            <p>Información y análisis de operaciones.</p>
-        </div>
-    </div>
-
-
-    <!-- RESPALDO -->
-    <div class="gallery-card">
-        <div class="gallery-image">
-            <img
-                src="images/Respaldo.png"
-                alt="Respaldo de datos de WSoft Lite"
-                class="gallery-clickable"
-            >
-        </div>
-
-        <div class="gallery-info">
-            <h3>Respaldo de datos</h3>
-            <p>Creación y gestión de copias de seguridad.</p>
-        </div>
-    </div>
-
-</div>
 
 </section>
+
 
 <!-- =========================
      GALLERY LIGHTBOX
@@ -1655,26 +1528,44 @@ document.addEventListener("keydown", function (event) {
 
 <div id="galleryLightbox" class="gallery-lightbox">
 
-    <button class="gallery-close" type="button" aria-label="Cerrar">
+    <button
+        class="gallery-close"
+        type="button"
+        aria-label="Cerrar">
         &times;
     </button>
 
-    <button class="gallery-prev" type="button" aria-label="Imagen anterior">
+    <button
+        class="gallery-prev"
+        type="button"
+        aria-label="Imagen anterior">
         &#10094;
     </button>
 
+
     <div class="gallery-lightbox-content">
-        <img id="galleryLightboxImage" src="" alt="">
+
+        <img
+            id="galleryLightboxImage"
+            src=""
+            alt=""
+        >
+
         <div id="galleryLightboxCaption"></div>
+
     </div>
 
-    <button class="gallery-next" type="button" aria-label="Imagen siguiente">
+
+    <button
+        class="gallery-next"
+        type="button"
+        aria-label="Imagen siguiente">
         &#10095;
     </button>
 
 </div>
 
-    
+
 <!-- =========================
      DOCUMENTACIÓN
 ========================= -->
@@ -1784,7 +1675,6 @@ document.addEventListener("keydown", function (event) {
     </div>
 
 </section>
-
 
 <!-- =========================
      DOWNLOAD
@@ -1904,13 +1794,21 @@ document.addEventListener("keydown", function (event) {
 
         <div class="footer-links">
 
-            <a href="#inicio">Inicio</a>
+            <a href="#inicio">
+                Inicio
+            </a>
 
-            <a href="#funciones">Funciones</a>
+            <a href="#funciones">
+                Funciones
+            </a>
 
-            <a href="#galeria">Galería</a>
+            <a href="#galeria">
+                Galería
+            </a>
 
-            <a href="#documentacion">Manual</a>
+            <a href="#documentacion">
+                Manual
+            </a>
 
             <a href="https://github.com/Wilfwels/WSoft-Lite"
                target="_blank">
@@ -1931,6 +1829,258 @@ document.addEventListener("keydown", function (event) {
     </div>
 
 </footer>
+
+
+<!-- =========================
+     GALLERY LIGHTBOX SCRIPT
+========================= -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =========================
+       ELEMENTOS
+    ========================= */
+
+    const galleryImages =
+        document.querySelectorAll(".gallery-clickable");
+
+    const galleryLightbox =
+        document.getElementById("galleryLightbox");
+
+    const galleryLightboxImage =
+        document.getElementById("galleryLightboxImage");
+
+    const galleryLightboxCaption =
+        document.getElementById("galleryLightboxCaption");
+
+    const galleryClose =
+        document.querySelector(".gallery-close");
+
+    const galleryPrev =
+        document.querySelector(".gallery-prev");
+
+    const galleryNext =
+        document.querySelector(".gallery-next");
+
+
+    let galleryCurrentIndex = 0;
+
+
+    /* =========================
+       ACTUALIZAR IMAGEN
+    ========================= */
+
+    function updateGalleryImage() {
+
+        const image =
+            galleryImages[galleryCurrentIndex];
+
+        if (!image) {
+            return;
+        }
+
+        galleryLightboxImage.src =
+            image.src;
+
+        galleryLightboxImage.alt =
+            image.alt;
+
+        galleryLightboxCaption.textContent =
+            image.alt;
+
+    }
+
+
+    /* =========================
+       ABRIR GALERÍA
+    ========================= */
+
+    function openGallery(index) {
+
+        galleryCurrentIndex = index;
+
+        updateGalleryImage();
+
+        galleryLightbox.classList.add("active");
+
+        document.body.style.overflow = "hidden";
+
+    }
+
+
+    /* =========================
+       CERRAR GALERÍA
+    ========================= */
+
+    function closeGallery() {
+
+        galleryLightbox.classList.remove("active");
+
+        document.body.style.overflow = "";
+
+    }
+
+
+    /* =========================
+       IMAGEN ANTERIOR
+    ========================= */
+
+    function previousGalleryImage() {
+
+        galleryCurrentIndex--;
+
+        if (galleryCurrentIndex < 0) {
+
+            galleryCurrentIndex =
+                galleryImages.length - 1;
+
+        }
+
+        updateGalleryImage();
+
+    }
+
+
+    /* =========================
+       IMAGEN SIGUIENTE
+    ========================= */
+
+    function nextGalleryImage() {
+
+        galleryCurrentIndex++;
+
+        if (
+            galleryCurrentIndex >=
+            galleryImages.length
+        ) {
+
+            galleryCurrentIndex = 0;
+
+        }
+
+        updateGalleryImage();
+
+    }
+
+
+    /* =========================
+       CLICK EN LAS IMÁGENES
+    ========================= */
+
+    galleryImages.forEach(
+        function (image, index) {
+
+            image.addEventListener(
+                "click",
+                function () {
+
+                    openGallery(index);
+
+                }
+            );
+
+        }
+    );
+
+
+    /* =========================
+       BOTÓN CERRAR
+    ========================= */
+
+    galleryClose.addEventListener(
+        "click",
+        closeGallery
+    );
+
+
+    /* =========================
+       BOTÓN ANTERIOR
+    ========================= */
+
+    galleryPrev.addEventListener(
+        "click",
+        previousGalleryImage
+    );
+
+
+    /* =========================
+       BOTÓN SIGUIENTE
+    ========================= */
+
+    galleryNext.addEventListener(
+        "click",
+        nextGalleryImage
+    );
+
+
+    /* =========================
+       CLIC FUERA DE LA IMAGEN
+    ========================= */
+
+    galleryLightbox.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                galleryLightbox
+            ) {
+
+                closeGallery();
+
+            }
+
+        }
+    );
+
+
+    /* =========================
+       TECLADO
+    ========================= */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                !galleryLightbox.classList.contains(
+                    "active"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            if (event.key === "Escape") {
+
+                closeGallery();
+
+            }
+
+
+            if (event.key === "ArrowLeft") {
+
+                previousGalleryImage();
+
+            }
+
+
+            if (event.key === "ArrowRight") {
+
+                nextGalleryImage();
+
+            }
+
+        }
+    );
+
+});
+
+</script>
 
 
 </body>
